@@ -96,16 +96,22 @@
           if (n1 < 90) {
             if (n1 < 10) {
               red = new createjs.Bitmap('./img/red/red1.png')
+              red.id = 1
             } else if (n1 < 30) {
               red = new createjs.Bitmap('./img/red/red2.png')
+              red.id = 2
             } else if (n1 < 40) {
               red = new createjs.Bitmap('./img/red/red3.png')
+              red.id = 3
             } else if (n1 < 50) {
               red = new createjs.Bitmap('./img/red/red4.png')
+              red.id = 4
             } else if (n1 < 60) {
               red = new createjs.Bitmap('./img/red/red5.png')
+              red.id = 5
             } else {
               red = new createjs.Bitmap('./img/red/red6.png')
+              red.id = 6
             }
           } else {
             // 小概率波奇豆
@@ -127,31 +133,37 @@
           red.addEventListener('click', (evt) => {
             if (!evt.paused) {
               // createjs.Ticker.setPaused(true);
+              //获取点击的红包类型
+              const id = evt.target
               createjs.Tween.removeTweens(evt.target);
               const stageX = evt.stageX
               const stageY = evt.stageY
               
               const gift = new createjs.Bitmap('./img/red/gift1.png')
               setTimeout(() => {
-                gift.x = stageX - 156/2
-                gift.y = stageY
-                console.log('---evt-----:', evt)
+                //坐标校验
+                gift.x = stageX - evt.localX
+                gift.y = stageY - evt.localY
+                console.log('---evt-----:', evt, '------id------:', id)
                 reds.removeChild(evt.target)
                 reds.addChild(gift)
                 reds.removeChild(evt.target)
                 reds.addChild(gift)
-                // createjs.Tween.get(gift).to({
-                //   x: toX
-                // }, duration);
-                // createjs.Tween.get(gift).to({
-                //   // y: Math.random() * (stageHeight + 2 * radius)
-                //   y: stageHeight + 2 * radius
-                // }, duration);
-                
-                // //停止后收回礼物
-                // createjs.Tween.get(gift).wait(4000).call(function () {
-                //   return reds.removeChild(gift);
-                // });
+                setTimeout(() => {
+                  createjs.Tween.get(gift).to({
+                    x: toX
+                  }, 2000);
+                  createjs.Tween.get(gift).to({
+                    // y: Math.random() * (stageHeight + 2 * radius)
+                    y: stageHeight + 2 * radius
+                  }, 2500);
+                  
+                  //停止后收回礼物
+                  createjs.Tween.get(gift).wait(2000).call(function () {
+                    return reds.removeChild(gift);
+                  });
+                }, 1000);
+               
               }, 1000);
               
               
